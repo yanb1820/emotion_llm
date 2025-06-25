@@ -95,6 +95,13 @@ model = AutoModelForSequenceClassification.from_pretrained(
     "distilbert-base-uncased",
     num_labels=7
 )
+# #freeze base model weights and training only classification head
+# for param in model.distilbert.parameters():
+#     param.requires_grad = False
+#
+# for name, param in model.named_parameters():
+#     if param.requires_grad:
+#         print(name)
 
 train_dataset = encoded_dataset["train"]
 eval_dataset = encoded_dataset["test"]
