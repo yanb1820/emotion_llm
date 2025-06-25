@@ -70,6 +70,7 @@ tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
 #creat a dictionary for ekman labels with id
 ekman_to_id = {label: i for i, label in enumerate(ekman_categories)}
+id_to_ekman= {id:ekman for ekman, id in ekman_to_id.items()}
 
 def preprocess(data_row):
     # Clean the text: lowercase and remove spaces
@@ -123,10 +124,10 @@ if __name__ == "__main__":
         metric_for_best_model="eval_accuracy",  # Best according to which number?
         greater_is_better=True, # Should that number go up or down to be better?
         # Save model after each epoch
-        num_train_epochs=10,
+        num_train_epochs=3,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,
-        learning_rate=1e-5,
+        learning_rate=2e-5,
         weight_decay=0.01,
         logging_dir="./logs",
         logging_steps=10,
