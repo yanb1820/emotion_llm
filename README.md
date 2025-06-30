@@ -2,18 +2,21 @@
 
 This project fine-tunes DistilBERT on the [GoEmotions](https://huggingface.co/datasets/go_emotions) dataset and maps the 28 original emotions to 6 Ekman emotions + neutral.
 
+## 1. Motivation
 
-## 1. Label Mapping
+This project connects NLP with cognitive science by mapping emotions to Ekman’s basic emotion theory. It helps build explainable AI for chatbots, social media analysis, and educational tools.
+
+## 2. Label Mapping
 
 GoEmotions → Ekman: joy, sadness, anger, fear, surprise, disgust, neutral.
 
-## 2. How It Works
+## 3. How It Works
 
 - Uses `transformers`, `datasets`, `scikit-learn`, and PyTorch
 - Applies multi-label → single-label filtering
 - Fine-tunes DistilBERT with Hugging Face Trainer API
 
-## 3. Project Files Overview
+## 4. Project Files Overview
 
 - **`emotion_trainer.py`**  
   - Fine-tunes DistilBERT on the GoEmotions dataset, mapped to Ekman’s six emotions + neutral.  
@@ -42,9 +45,7 @@ GoEmotions → Ekman: joy, sadness, anger, fear, surprise, disgust, neutral.
 - **`results/`**  
   - Contains training logs and metrics from Hugging Face `Trainer`.
 
-## 4. Motivation
 
-This project connects NLP with cognitive science by mapping emotions to Ekman’s basic emotion theory. It helps build explainable AI for chatbots, social media analysis, and educational tools.
 ## 5. Performance
 
 After 3 epochs:
