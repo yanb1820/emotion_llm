@@ -1,15 +1,21 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import gradio as gr
-from main import id_to_ekman
+from emotion_trainer import train_model
 from transformers_interpret import SequenceClassificationExplainer
 import numpy as np
+from emotion_trainer import label_to_id
 
-model_path = "final_emotion_model"
-model = AutoModelForSequenceClassification.from_pretrained(model_path, num_labels=7)
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model.eval()
-id_to_label = id_to_ekman
+
+ID_TO_EKMAN = {value: key for key,value in label_to_id.items()}
+MODEL_PATH = "final_emotion_model"
+
+try:
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH, num_labels=7)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+    model.eval()
+except Exception as e:
+    raise RuntimeError(f"Failed to load model or tokenizer from {MODEL_PATH}: {e}")
 
 #for  transformations interpret
 explainer = SequenceClassificationExplainer(model=model, tokenizer=tokenizer)
@@ -20,8 +26,11 @@ def predict_emotion(text):
     clean_attributions = [(word, score) for word, score in word_attributions if word not in ["[CLS]", "[SEP]"]]
     explanation = " \n".join([f" • {word} ({round(score, 2)})" for word, score in clean_attributions])
 
-    pred_label_id = int(explainer.predicted_class_name.replace("LABEL_", ""))
-    pred_label = id_to_ekman[pred_label_id]
+    try:
+        pred_label_id = int(explainer.predicted_class_name.replace("LABEL_", ""))
+        pred_label = ID_TO_EKMAN.get(pred_label_id, "Unknown")
+    except Exception:
+        pred_label = "Prediction failed"
 
     # compute confidence score 0-1
     inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
